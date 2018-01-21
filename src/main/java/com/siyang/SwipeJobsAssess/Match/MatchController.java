@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,13 +15,22 @@ public class MatchController {
     @Autowired
     private MatchService matchService;
 
-    @RequestMapping("/match/{id}")
+    @RequestMapping("/match/{workerId}")
     public List<Worker> getMatch(@PathVariable String workerId) {
+
+        // Obtain all workers
         Worker[] workers = matchService.getWorkers();
+
+        // Find the worker to be queried
+        Worker workerWithId = matchService.getWorkerWithId(workerId, Arrays.asList(workers));
+
+        // Obtain all jobs
         Job[] jobs = matchService.getJobs();
 
-        Worker workerWithId = matchService.getWorkerWithId(workerId);
+        // Make a match
+        return matchService.makeMatch(workerWithId, Arrays.asList(jobs));
 
-        return Arrays.asList(workers);
+//        return new ArrayList<Worker>(Arrays.asList(workerWithId));
+//        return Arrays.asList(workers);
     }
 }

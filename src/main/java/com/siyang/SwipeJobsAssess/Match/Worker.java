@@ -2,10 +2,11 @@ package com.siyang.SwipeJobsAssess.Match;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Worker {
+public class Worker implements Serializable {
 
     private int rating;
     private boolean isActive;
@@ -20,6 +21,22 @@ public class Worker {
     private int age;
     private String guid;
     private int userId;
+
+    public Worker(int rating, boolean isActive, List<String> certificates, List<String> skills, JobSearchAddress jobSearchAddress, String transportation, boolean hasDriversLicense, List<Availability> availability, String phone, String email, int age, String guid, int userId) {
+        this.rating = rating;
+        this.isActive = isActive;
+        this.certificates = certificates;
+        this.skills = skills;
+        this.jobSearchAddress = jobSearchAddress;
+        this.transportation = transportation;
+        this.hasDriversLicense = hasDriversLicense;
+        this.availability = availability;
+        this.phone = phone;
+        this.email = email;
+        this.age = age;
+        this.guid = guid;
+        this.userId = userId;
+    }
 
     public Worker() {
     }

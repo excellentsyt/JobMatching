@@ -2,8 +2,10 @@ package com.siyang.SwipeJobsAssess.Match;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class JobSearchAddress {
+public class JobSearchAddress implements Serializable {
     private String unit;
     private int maxJobDistance;
     private String longitude;
@@ -14,6 +16,9 @@ public class JobSearchAddress {
         this.maxJobDistance = maxJobDistance;
         this.longitude = longitude;
         this.latitude = latitude;
+    }
+
+    public JobSearchAddress() {
     }
 
     public String getUnit() {

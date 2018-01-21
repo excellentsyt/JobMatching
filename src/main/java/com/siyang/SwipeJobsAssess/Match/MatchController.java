@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -18,10 +19,13 @@ public class MatchController {
     private MatchService matchService;
 
     @RequestMapping("/match")
-    public WorkersResponse getMatch(/*@PathVariable String workerId*/) {
+    public List<Worker> getMatch(/*@PathVariable String workerId*/) {
         RestTemplate restTemplate = new RestTemplate();
         String fooResourceUrl = "http://test.swipejobs.com/api/workers";
-        ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl, String.class);
-        return response.getBody();
+//        ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl, String.class);
+//        return response.getBody();
+
+        Worker[] response = restTemplate.getForObject(fooResourceUrl, Worker[].class);
+        return Arrays.asList(response);
     }
 }

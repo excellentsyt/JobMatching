@@ -24,6 +24,23 @@ public class MatchService {
         return workers.stream().filter(worker -> worker.getUserId() == Integer.parseInt(workerId)).findFirst().get();
     }
 
+
+    /**
+     * Must meet conditions:
+     -- isActive
+     -- driver licence
+     -- certificates matching
+     -- distance matching
+
+     Sorting conditions:
+     -- pay rate
+     -- distance
+     -- number workers required
+
+     * @param worker - the worker
+     * @param jobs - all jobs that are currently available
+     * @return - top three jobs if there is any
+     */
     public List<Worker> makeMatch(Worker worker, List<Job> jobs) {
 
     }

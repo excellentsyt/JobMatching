@@ -60,7 +60,7 @@ public class MatchService {
         // Set up return list
         List<Worker> ret = new ArrayList<>();
 
-        // Set up a temporary Set
+        // Set up a temporary Set to remove any duplicate jobs in case
         Set<Job> tempMatchedJobs = new HashSet<>(jobs);
 
         // 1. Is active
@@ -68,26 +68,31 @@ public class MatchService {
             return ret;
         }
 
-        // 2. Driver licence matching
+        // Check other must conditions
         for (Job job : tempMatchedJobs) {
+            // 2. Driver licence matching
             if (job.isDriverLicenseRequired() && !worker.isHasDriversLicense()) {
                 tempMatchedJobs.remove(job);
+                continue;
             }
-        }
 
-        // 3. Certificates matching
-        for (Job job : tempMatchedJobs) {
+            // 3. Certificates matching
             if (!hasAllCertificates(worker, job)) {
                 tempMatchedJobs.remove(job);
+                continue;
             }
-        }
 
-        // 4. Distance matching
-        for (Job job : tempMatchedJobs) {
+            // 4. Distance matching
             if (!withinRange(worker, job)) {
                 tempMatchedJobs.remove(job);
             }
         }
+
+
+        // Sort the matching jobs according to a few conditions
+        // Here I define the sorting order but it is changeable according to different requirements
+
+
 
 
 

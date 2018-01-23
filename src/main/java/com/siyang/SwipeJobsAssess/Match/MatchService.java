@@ -66,25 +66,26 @@ public class MatchService {
         }
 
         // Check other must conditions
-        for (Job job : tempMatchedJobs) {
+        for(Iterator<Job> i = tempMatchedJobs.iterator(); i.hasNext();) {
+            Job job = i.next();
+
             // 2. Driver licence matching
             if (job.isDriverLicenseRequired() && !worker.isHasDriversLicense()) {
-                tempMatchedJobs.remove(job);
+                i.remove();
                 continue;
             }
 
             // 3. Certificates matching
             if (!hasAllCertificates(worker, job)) {
-                tempMatchedJobs.remove(job);
+                i.remove();
                 continue;
             }
 
             // 4. Distance matching
             if (!withinRange(worker, job)) {
-                tempMatchedJobs.remove(job);
+                i.remove();
             }
         }
-
 
         // Sort the matching jobs according to a few conditions
         // Here I define the sorting order but it is changeable according to different requirements

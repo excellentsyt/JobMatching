@@ -109,9 +109,14 @@ public class MatchService {
     }
 
     private boolean withinRange(Worker worker, Job job) {
+        double distance = distance(Double.parseDouble(worker.getJobSearchAddress().getLatitude()),
+                                   Double.parseDouble(worker.getJobSearchAddress().getLongitude()),
+                                   Double.parseDouble(job.getLocation().getLatitude()),
+                                   Double.parseDouble(job.getLocation().getLongitude()),
+                                   "K");
 
+        return !(distance > worker.getJobSearchAddress().getMaxJobDistance());
     }
-
 
     /**
      * Calculate the distance between two points based on long and lat.
@@ -135,7 +140,7 @@ public class MatchService {
             dist = dist * 0.8684;
         }
 
-        return (dist);
+        return dist;
     }
 
 

@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,8 +28,5 @@ public class MatchController {
 
         // Make a match
         return matchService.makeMatch(workerWithId, Arrays.asList(jobs));
-
-//        return new ArrayList<Worker>(Arrays.asList(workerWithId));
-//        return Arrays.asList(workers);
     }
 }

@@ -7,6 +7,7 @@ import java.util.*;
 
 @Service
 public class MatchService {
+    PriorityQueue<WrapperJob> pq;
 
     /**
      * @return
@@ -89,7 +90,7 @@ public class MatchService {
 
         // Sort the matching jobs according to a few conditions
         // Here I define the sorting order but it is changeable according to different requirements
-        PriorityQueue<WrapperJob> pq = new PriorityQueue<>((o1, o2) -> {
+        this.pq = new PriorityQueue<>((o1, o2) -> {
             double bill1 = Double.parseDouble(o1.getOriginalJob().getBillRate().substring(1));
             double bill2 = Double.parseDouble(o2.getOriginalJob().getBillRate().substring(1));
 
@@ -126,6 +127,10 @@ public class MatchService {
         return ret;
     }
 
+    public PriorityQueue<WrapperJob> getPq() {
+        return pq;
+    }
+
     /**
      * @param worker
      * @param job
@@ -144,5 +149,4 @@ public class MatchService {
         WrapperJob wrapperJob = new WrapperJob(job, worker);
         return (double)worker.getJobSearchAddress().getMaxJobDistance() > wrapperJob.getDistanceToWorker();
     }
-
 }

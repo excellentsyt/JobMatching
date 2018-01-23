@@ -37,13 +37,13 @@ public class MatchService {
 
 
     /**
-     * Must meet conditions:
+     *Must meet conditions:
      -- isActive
      -- driver licence
      -- certificates matching
      -- distance matching
 
-     Sorting conditions:
+     Sorting jobs with conditions:
      -- 1. pay rate
      -- 2. distance
      -- 3. number workers required

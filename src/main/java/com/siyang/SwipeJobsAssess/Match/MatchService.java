@@ -60,8 +60,8 @@ public class MatchService {
         // Set up a temporary Set to remove any duplicate jobs in case
         Set<Job> tempMatchedJobs = new HashSet<>(jobs);
 
-        // 1. Is active
-        if (!worker.isActive()) {
+        // 1. Is active - assume only active workers can get recommended jobs returned
+        if (!worker.isIsActive()) {
             return ret;
         }
 

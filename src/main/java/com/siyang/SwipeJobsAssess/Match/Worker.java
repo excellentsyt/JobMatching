@@ -49,12 +49,12 @@ public class Worker implements Serializable {
         this.rating = rating;
     }
 
-    public boolean isActive() {
+    public boolean isIsActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     public List<String> getCertificates() {

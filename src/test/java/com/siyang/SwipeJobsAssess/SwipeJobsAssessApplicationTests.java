@@ -57,8 +57,12 @@ public class SwipeJobsAssessApplicationTests {
 			if (!worker.isIsActive()) {
 				assertEquals(0, pq.size());
 			} else {
+				double curBill = (double)Integer.MAX_VALUE;
 				while(pq.size() > 0) {
 					WrapperJob wj = pq.poll();
+					double billRate = Double.parseDouble(wj.getOriginalJob().getBillRate().substring(1));
+					assertTrue(curBill >= billRate);
+					curBill = billRate;
 					assertWorkerMatchJob(worker, wj);
 				}
 			}

@@ -3,10 +3,7 @@ package com.siyang.SwipeJobsAssess.Match;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class MatchService {
@@ -55,10 +52,10 @@ public class MatchService {
      * @param jobs - all jobs that are currently available
      * @return - top three jobs if there is any
      */
-    public List<Worker> makeMatch(Worker worker, List<Job> jobs) {
+    public List<Job> makeMatch(Worker worker, List<Job> jobs) {
 
         // Set up return list
-        List<Worker> ret = new ArrayList<>();
+        List<Job> ret = new ArrayList<>();
 
         // Set up a temporary Set to remove any duplicate jobs in case
         Set<Job> tempMatchedJobs = new HashSet<>(jobs);
@@ -91,10 +88,33 @@ public class MatchService {
 
         // Sort the matching jobs according to a few conditions
         // Here I define the sorting order but it is changeable according to different requirements
+        PriorityQueue<WrapperJob> pq = new PriorityQueue<>((o1, o2) -> {
+            if (Double.parseDouble(o1.getOriginalJob().getBillRate()) > Double.parseDouble(o2.getOriginalJob().getBillRate())) {
+                return -1;
+            } else if (Double.parseDouble(o1.getOriginalJob().getBillRate()) < Double.parseDouble(o2.getOriginalJob().getBillRate())) {
+                return 1;
+            } else {
+                if (o1.getDistanceToWorker() > o2.getDistanceToWorker()) {
+                    return 1;
+                } else if (o1.getDistanceToWorker() < o2.getDistanceToWorker()) {
+                    return -1;
+                } else {
+                    return o1.getOriginalJob().getWorkersRequired() > o2.getOriginalJob().getWorkersRequired() ? -1 : 1;
+                }
+            }
+        });
 
+        // Push into maxHeap
+        for (Job job : tempMatchedJobs) {
+            pq.offer(new WrapperJob(job, worker));
+        }
 
-
-
+        // Output no more than three jobs
+        for (int i = 0; i < 3; i++) {
+            if (!pq.isEmpty()) {
+                ret.add(pq.poll().getOriginalJob());
+            }
+        }
 
         return ret;
     }
@@ -114,57 +134,8 @@ public class MatchService {
     }
 
     private boolean withinRange(Worker worker, Job job) {
-        double distance = distance(Double.parseDouble(worker.getJobSearchAddress().getLatitude()),
-                                   Double.parseDouble(worker.getJobSearchAddress().getLongitude()),
-                                   Double.parseDouble(job.getLocation().getLatitude()),
-                                   Double.parseDouble(job.getLocation().getLongitude()),
-                                   "K");
-
-        return !(distance > worker.getJobSearchAddress().getMaxJobDistance());
+        WrapperJob wrapperJob = new WrapperJob(job, worker);
+        return (double)worker.getJobSearchAddress().getMaxJobDistance() > wrapperJob.getDistanceToWorker();
     }
 
-    /**
-     * Calculate the distance between two points based on long and lat.
-     * @param lat1
-     * @param lon1
-     * @param lat2
-     * @param lon2
-     * @param unit
-     * @return
-     */
-    private double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
-        double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
-        dist = Math.acos(dist);
-        dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
-
-        if (unit.equals("K")) {
-            dist = dist * 1.609344;
-        } else if (unit.equals("N")) {
-            dist = dist * 0.8684;
-        }
-
-        return dist;
-    }
-
-
-    /**
-     * This function converts decimal degrees to radians
-     * @param deg
-     * @return
-     */
-    private double deg2rad(double deg) {
-        return (deg * Math.PI / 180.0);
-    }
-
-
-    /**
-     * This function converts radians to decimal degrees
-     * @param rad
-     * @return
-     */
-    private double rad2deg(double rad) {
-        return (rad * 180 / Math.PI);
-    }
 }

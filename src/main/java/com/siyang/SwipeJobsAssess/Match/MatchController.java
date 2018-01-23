@@ -16,7 +16,7 @@ public class MatchController {
     private MatchService matchService;
 
     @RequestMapping("/match/{workerId}")
-    public List<Worker> getMatch(@PathVariable String workerId) {
+    public List<Job> getMatch(@PathVariable String workerId) {
 
         // Obtain all workers
         Worker[] workers = matchService.getWorkers();

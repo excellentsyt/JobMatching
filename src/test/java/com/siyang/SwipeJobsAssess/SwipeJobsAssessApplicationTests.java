@@ -51,6 +51,10 @@ public class SwipeJobsAssessApplicationTests {
 			assertTrue(result.size() <= 3);
 			PriorityQueue<WrapperJob> pq = matchService.getPq();
 
+			/*
+			 *Must meet condition:
+			 -- isActive
+			 */
 			if (!worker.isIsActive()) {
 				assertEquals(0, pq.size());
 			} else {

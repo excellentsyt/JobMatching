@@ -44,9 +44,9 @@ public class MatchService {
      -- distance matching
 
      Sorting conditions:
-     -- pay rate
-     -- distance
-     -- number workers required
+     -- 1. pay rate
+     -- 2. distance
+     -- 3. number workers required
 
      * @param worker - the worker
      * @param jobs - all jobs that are currently available
@@ -90,16 +90,22 @@ public class MatchService {
         // Sort the matching jobs according to a few conditions
         // Here I define the sorting order but it is changeable according to different requirements
         PriorityQueue<WrapperJob> pq = new PriorityQueue<>((o1, o2) -> {
-            if (Double.parseDouble(o1.getOriginalJob().getBillRate()) > Double.parseDouble(o2.getOriginalJob().getBillRate())) {
+            double bill1 = Double.parseDouble(o1.getOriginalJob().getBillRate().substring(1));
+            double bill2 = Double.parseDouble(o2.getOriginalJob().getBillRate().substring(1));
+
+            // Assume we recommend jobs which have higher rates
+            if (bill1 > bill2) {
                 return -1;
-            } else if (Double.parseDouble(o1.getOriginalJob().getBillRate()) < Double.parseDouble(o2.getOriginalJob().getBillRate())) {
+            } else if (bill1 < bill2) {
                 return 1;
             } else {
+                // Assume we recommend jobs which are closer to the workers
                 if (o1.getDistanceToWorker() > o2.getDistanceToWorker()) {
                     return 1;
                 } else if (o1.getDistanceToWorker() < o2.getDistanceToWorker()) {
                     return -1;
                 } else {
+                    //Assume we recommend jobs which have more vacancies
                     return o1.getOriginalJob().getWorkersRequired() > o2.getOriginalJob().getWorkersRequired() ? -1 : 1;
                 }
             }
